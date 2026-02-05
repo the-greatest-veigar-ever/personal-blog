@@ -1,63 +1,65 @@
-# GAROLD'S BLOG
+# Personal Blog
 
-**A Digital Sanctuary for Thoughts.**
+A lightweight, zero-dependency blogging platform built with Vanilla JavaScript and Firebase. Designed for performance, maintainability, and a distraction-free writing experience.
 
-This is not just another blog. It is a minimalist writing environment designed for focus, clarity, and aesthetic pleasure. Built with a "Zero-Dependency" philosophy for the core runtime, ensuring lightning-fast performance and absolute control over the visual experience.
+## Architecture
 
-## PHILOSOPHY
+The application checks the following architectural boxes:
+- **Core Runtime**: Vanilla JavaScript (ES6+) for maximum performance and zero build-step overhead.
+- **State Management**: Custom lightweight Controller pattern (`PostController`, `LockController`, `UIController`) with an Event Bus for loose coupling.
+- **Persistence**: Firebase Firestore for real-time data syncing and storage.
+- **Editor**: Integrated Quill.js instance with custom bindings for markdown-like shortcuts and structure.
+- **Security**: Client-side inactivity monitoring and PIN-based overlay (`LockController`) to secure the session state.
 
-**Minimal Luxury**
-We believe that digital tools should be beautiful. The interface draws inspiration from high-end editorial layouts and the MNTN design system—utilizing deep, resonant colors (Dark Blue / Gold) and crisp, serif typography to elevate the writing experience.
+## Tech Stack
 
-**Privacy First**
-Your thoughts are yours. With the integrated Privacy Shield, you can lock the interface instantly. Whether stepping away from your desk or simply needing a moment of privacy, your content remains secure behind a PIN-protected overlay.
+- **Frontend**: HTML5, CSS3 (CSS Variables for theming), JavaScript (ES Modules).
+- **Backend / BaaS**: Firebase Hosting & Firestore.
+- **External Libs**: Quill.js (Rich Text Editor).
+- **Testing**: Jest (Integration & Unit tests).
 
-## CORE FEATURES
+## Key Features
 
-**The Canvas**
-A distraction-free, full-screen editor powered by Quill.js, customized to strip away the noise. It supports rich text, code blocks, and seamless image handling without cluttering the UI.
+1.  **Distraction-Free Editor**: Full-screen writing interface with custom key bindings (e.g., Tab indentation handling).
+2.  **Privacy/Security Module**:
+    -   Configurable **Screen Lock** with 4 or 6-digit PIN.
+    -   Auto-lock trigger based on user inactivity (configurable timeout).
+    -   Strict input validation and secure overlay rendering.
+3.  **Theme Engine**: Native CSS Variable implementation for seamless Light/Dark mode switching.
+4.  **Local & Remote Sync**: Hybrid storage strategy leveraging `localStorage` for preferences and Firestore for content.
 
-**Privacy Shield**
-An integrated screen lock system.
-- Secure 4-digit or 6-digit PIN protection.
-- Auto-lock capability based on inactivity (customizable timer).
-- Visual obfuscation (Opaque overlay) preventing prying eyes.
+## Setup & Development
 
-**Adaptive Aesthetics**
-- **Luxe Dark**: A deep, reliable environment for night work or focused writing.
-- **Paper Light**: A crisp, high-contrast mode for clarity and day-time editing.
+### Prerequisites
+- Node.js (v14+)
+- Firebase CLI (`npm install -g firebase-tools`)
 
-**Architecture**
-- **Skeletal**: Vanilla JavaScript architecture. No frameworks, no build step bloat.
-- **Resilient**: Firebase backend for real-time persistence and secure authentication.
+### Installation
 
-## GETTING STARTED
-
-**Prerequisites**
-- Node.js
-- Firebase CLI
-
-**Installation**
 ```bash
 git clone https://github.com/the-greatest-veigar-ever/personal-blog.git
 cd personal-blog
 npm install
 ```
 
-**Development**
-Launch the local dev server.
+### Local Development
+
+Start the development server:
+
 ```bash
 npm start
 ```
-Access the sanctuary at `http://localhost:8080`.
 
-**Deployment**
-Deploy to the edge via Firebase.
+Runs on `http://localhost:8080` by default.
+
+### Deployment
+
+Deploy to Firebase Hosting:
+
 ```bash
 npm run deploy
 ```
 
-## LICENSE
+## License
 
 MIT License.
-Crafted with precision.
