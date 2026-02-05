@@ -1,0 +1,159 @@
+#lockScreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--color-bg);
+    /* Use theme background */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    cursor: default;
+}
+
+#lockScreen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lock-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#lockScreen.active .lock-content {
+    transform: translateY(0);
+}
+
+.lock-icon {
+    width: 64px;
+    height: 64px;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.lock-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+}
+
+/* PIN Dots */
+.pin-display {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pin-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--color-text-secondary);
+    transition: all 0.2s ease;
+}
+
+.pin-dot.filled {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: scale(1.2);
+}
+
+.pin-dot.error {
+    border-color: var(--color-danger);
+    background: var(--color-danger);
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Keypad */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.keypad-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    font-size: 1.5rem;
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.keypad-btn:hover {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.keypad-btn:active {
+    transform: scale(0.95);
+    background: var(--color-primary);
+    color: var(--color-bg);
+}
+
+.keypad-btn.transparent {
+    border-color: transparent;
+}
+
+.keypad-btn.transparent:hover {
+    background: transparent;
+    color: var(--color-primary);
+}
+
+/* Setup/Settings Modal Additions */
+.settings-section {
+    margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-6);
+}
+
+.settings-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.settings-title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-4);
+    color: var(--color-primary);
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}

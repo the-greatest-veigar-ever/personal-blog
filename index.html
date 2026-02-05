@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A minimal luxury blog writing application with rich text editing">
+    <title>Garold's Blog</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles/main.css?v=29">
+    <link rel="stylesheet" href="styles/editor.css?v=28">
+    <link rel="stylesheet" href="styles/bubble-menu.css?v=2">
+    <link rel="stylesheet" href="styles/sidebar.css?v=22">
+    <link rel="stylesheet" href="styles/lockscreen.css?v=1">
+</head>
+
+<body>
+    <div class="header-hover-area"></div>
+    <!-- SVG Sprite -->
+    <svg style="display: none;">
+        <symbol id="icon-posts" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+        </symbol>
+        <symbol id="icon-commands" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+            <line x1="6" y1="8" x2="6" y2="8"></line>
+            <line x1="10" y1="8" x2="10" y2="8"></line>
+            <line x1="14" y1="8" x2="14" y2="8"></line>
+            <line x1="18" y1="8" x2="18" y2="8"></line>
+            <line x1="6" y1="12" x2="6" y2="12"></line>
+            <line x1="10" y1="12" x2="10" y2="12"></line>
+            <line x1="14" y1="12" x2="14" y2="12"></line>
+            <line x1="18" y1="12" x2="18" y2="12"></line>
+            <line x1="6" y1="16" x2="18" y2="16"></line>
+        </symbol>
+        <symbol id="icon-new" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+        </symbol>
+        <symbol id="icon-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+        </symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </symbol>
+        <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </symbol>
+        <symbol id="icon-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7v6h6"></path>
+            <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path>
+        </symbol>
+        <symbol id="icon-redo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 7v6h-6"></path>
+            <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"></path>
+        </symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </symbol>
+        <symbol id="icon-empty-posts" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+        </symbol>
+        <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+        </symbol>
+        <symbol id="icon-align-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="21" y1="6" x2="3" y2="6"></line>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="18" x2="3" y2="18"></line>
+        </symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+            </polygon>
+        </symbol>
+        <symbol id="icon-zen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Focus/Eye icon for Zen mode -->
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"></path>
+        </symbol>
+        <symbol id="icon-zen-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Eye off icon for exiting Zen mode -->
+            <path
+                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+            </path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+        </symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+        </symbol>
+        <symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <line x1="7" y1="7" x2="7.01" y2="7"></line>
+        </symbol>
+        <symbol id="icon-align-center" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="10" x2="6" y2="10"></line>
+            <line x1="21" y1="6" x2="3" y2="6"></line>
+            <line x1="21" y1="14" x2="3" y2="14"></line>
+            <line x1="18" y1="18" x2="6" y2="18"></line>
+        </symbol>
+        <symbol id="icon-bold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
+            <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
+        </symbol>
+        <symbol id="icon-italic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="4" x2="10" y2="4"></line>
+            <line x1="14" y1="20" x2="5" y2="20"></line>
+            <line x1="15" y1="4" x2="9" y2="20"></line>
+        </symbol>
+        <symbol id="icon-underline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path>
+            <line x1="4" y1="21" x2="20" y2="21"></line>
+        </symbol>
+        <symbol id="icon-strike" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 4H9a3 3 0 0 0-2.83 4"></path>
+            <path d="M14 12a4 4 0 0 1 0 8H6"></path>
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+        </symbol>
+        <symbol id="icon-list-ordered" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="10" y1="6" x2="21" y2="6"></line>
+            <line x1="10" y1="12" x2="21" y2="12"></line>
+            <line x1="10" y1="18" x2="21" y2="18"></line>
+            <path d="M4 6h1v4"></path>
+            <path d="M4 10h2"></path>
+            <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path>
+        </symbol>
+        <symbol id="icon-list-bullet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </symbol>
+        <symbol id="icon-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="21" y1="10" x2="7" y2="10"></line>
+            <line x1="21" y1="6" x2="3" y2="6"></line>
+            <line x1="21" y1="14" x2="3" y2="14"></line>
+            <line x1="21" y1="18" x2="7" y2="18"></line>
+            <path d="M11 10a8 8 0 0 1-5 6.6L3 18"></path>
+        </symbol>
+        <symbol id="icon-blockquote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 11h.01"></path>
+            <path d="M9 11h.01"></path>
+            <path d="M10 8c-2.3 0-4.3 1.8-4.8 4.2"></path>
+            <path d="M16 8c-2.3 0-4.3 1.8-4.8 4.2"></path>
+            <path d="M3 21h18"></path>
+        </symbol>
+        <symbol id="icon-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+        </symbol>
+        <symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        </symbol>
+        <symbol id="icon-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+        </symbol>
+        <symbol id="icon-clean" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </symbol>
+    </svg>
+
+    <!-- Minimal Header -->
+    <header class="header">
+        <div class="header-brand">
+            <button id="postsBtn" class="btn btn-icon" title="My Posts">
+                <svg>
+                    <use href="#icon-posts"></use>
+                </svg>
+            </button>
+            <h1 class="header-title">
+                <span class="brand-garold">Garold's</span>
+                <span class="brand-blog">Blog</span>
+            </h1>
+        </div>
+        <div class="header-actions">
+            <!-- Save Status -->
+            <span id="saveStatus" class="save-status"></span>
+
+            <!-- Shortcuts Button -->
+            <button class="btn btn-icon" id="shortcutsBtn" title="Keyboard Shortcuts">
+                <svg>
+                    <use href="#icon-commands"></use>
+                </svg>
+            </button>
+
+            <button id="newPostBtn" class="btn btn-secondary" title="New Post">
+                <svg>
+                    <use href="#icon-new"></use>
+                </svg>
+                <span>New</span>
+            </button>
+            <button id="saveBtn" class="btn btn-primary" title="Save Post (Cmd+S)">
+                <svg>
+                    <use href="#icon-save"></use>
+                </svg>
+                <span>Save</span>
+            </button>
+            <button id="deleteBtn" class="btn btn-icon" title="Delete Post" style="color: var(--color-error);">
+                <svg>
+                    <use href="#icon-trash"></use>
+                </svg>
+            </button>
+
+            <div class="dropdown-wrapper">
+                <button id="exportBtn" class="btn btn-icon" title="Export">
+                    <svg>
+                        <use href="#icon-download"></use>
+                    </svg>
+                </button>
+                <div class="dropdown-menu" id="exportMenu">
+                    <button class="dropdown-item" data-format="markdown">Markdown (.md)</button>
+                    <button class="dropdown-item" data-format="html">HTML (.html)</button>
+                    <button class="dropdown-item" data-format="json">JSON (.json)</button>
+                    <button class="dropdown-item" data-format="pdf">Styled PDF (.pdf)</button>
+                </div>
+            </div>
+
+            <button id="themeToggle" class="btn btn-icon" title="Toggle Theme">
+                <svg class="icon-sun">
+                    <use href="#icon-sun"></use>
+                </svg>
+                <svg class="icon-moon">
+                    <use href="#icon-moon"></use>
+                </svg>
+            </button>
+
+            <button id="settingsBtn" class="btn btn-icon" title="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                    </path>
+                </svg>
+            </button>
+
+            <button id="lockBtn" class="btn btn-icon" title="Lock Screen">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </button>
+            <button id="zenModeBtn" class="btn btn-icon" title="Zen Mode">
+                <svg class="icon-enter-zen">
+                    <use href="#icon-zen"></use>
+                </svg>
+                <svg class="icon-exit-zen" style="display: none;">
+                    <use href="#icon-zen-off"></use>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Full-Page Editor -->
+    <main class="main-content">
+
+        <!-- Welcome / Empty State Screen -->
+        <div id="welcomeScreen" class="welcome-screen" style="display: none;">
+            <div class="welcome-content">
+                <div class="welcome-icon">
+                    <svg>
+                        <use href="#icon-feather"></use>
+                    </svg>
+                </div>
+                <h1 id="welcomeGreeting" class="welcome-greeting">Hello.</h1>
+                <div class="welcome-card">
+                    <p id="welcomeText" class="welcome-text">Loading inspiration...</p>
+                    <p id="welcomeAuthor" class="welcome-author"></p>
+                    <button id="inspireBtn" class="btn btn-secondary btn-sm">
+                        <svg>
+                            <use href="#icon-redo"></use>
+                        </svg> Inspire Me
+                    </button>
+                </div>
+                <div class="welcome-actions">
+                    <button id="welcomeNewBtn" class="btn btn-primary btn-lg">
+                        Create New Post
+                    </button>
+                    <button id="welcomeOpenBtn" class="btn btn-secondary btn-lg">
+                        Open Existing
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor Wrapper (to toggle visibility) -->
+        <div id="editorWrapper">
+            <!-- Post Title -->
+            <input type="text" id="postTitle" class="post-title-input" placeholder="Untitled Post">
+
+            <!-- Post Metadata -->
+            <div id="postMetadata" class="post-metadata">
+                <span class="meta-item">Created: <span id="metaCreated">-</span></span>
+                <span class="meta-separator">•</span>
+                <span class="meta-item">Updated: <span id="metaUpdated">-</span></span>
+                <span class="meta-separator">•</span>
+            </div>
+
+            <!-- Quill Toolbar -->
+            <div id="toolbar" class="ql-toolbar ql-snow">
+                <span class="ql-formats">
+                    <button class="ql-undo" title="Undo">
+                        <svg>
+                            <use href="#icon-undo"></use>
+                        </svg>
+                    </button>
+                    <button class="ql-redo" title="Redo">
+                        <svg>
+                            <use href="#icon-redo"></use>
+                        </svg>
+                    </button>
+                </span>
+                <span class="ql-formats">
+                    <select class="ql-header" title="Heading">
+                        <option value="1">Heading 1</option>
+                        <option value="2">Heading 2</option>
+                        <option value="3">Heading 3</option>
+                        <option value="4">Heading 4</option>
+                        <option value="5">Heading 5</option>
+                        <option value="6">Heading 6</option>
+                        <option selected value="">Normal</option>
+                    </select>
+                </span>
+                <span class="ql-formats">
+                    <select class="ql-font" title="Font">
+                        <option value="lora" selected>Lora</option>
+                        <option value="inter">Inter</option>
+                        <option value="source-serif-4">Source Serif 4</option>
+                        <option value="merriweather">Merriweather</option>
+                        <option value="open-sans">Open Sans</option>
+                        <option value="roboto">Roboto</option>
+                    </select>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-bold" title="Bold">
+                        <svg>
+                            <use href="#icon-bold"></use>
+                        </svg>
+                    </button>
+                    <button class="ql-italic" title="Italic">
+                        <svg>
+                            <use href="#icon-italic"></use>
+                        </svg>
+                    </button>
+                    <button class="ql-underline" title="Underline">
+                        <svg>
+                            <use href="#icon-underline"></use>
+                        </svg>
+                    </button>
+                    <button class="ql-strike" title="Strikethrough">
+                        <svg>
+                            <use href="#icon-strike"></use>
+                        </svg>
+                    </button>
+                </span>
+                <span class="ql-formats">
+                    <select class="ql-color" title="Text Color"></select>
+                    <select class="ql-background" title="Highlight Color"></select>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-list" value="ordered" title="Numbered List">
+                        <svg>
+                            <use href="#icon-list-ordered"></use>
+                        </svg>
+                    </button>
+                    <button class="ql-list" value="bullet" title="Bullet List">
+                        <svg>
+                            <use href="#icon-list-bullet"></use>
+                        </svg>
+                    </button>
+                    <button class="ql-list" value="check" title="Checklist" id="checklistBtn">
+                        <svg>
+                            <use href="#icon-list-check"></use>
+                        </svg>
+                    </button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-align-cycle" title="Text Alignment">
+                        <svg>
+                            <use href="#icon-align-left"></use>
+                        </svg>
+                    </button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-blockquote" title="Blockquote">
+                        <svg>
+                            <use href="#icon-blockquote"></use>
+                        </svg>
+                    </button>
+                    <button class="ql-code-block" title="Code Block">
+                        <svg>
+                            <use href="#icon-code"></use>
+                        </svg>
+                    </button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-link" title="Insert Link">
+                        <svg>
+                            <use href="#icon-link"></use>
+                        </svg>
+                    </button>
+                    <button class="ql-image" title="Insert Image">
+                        <svg>
+                            <use href="#icon-image"></use>
+                        </svg>
+                    </button>
+                </span>
+
+                <span class="ql-formats">
+                    <button class="ql-clean" title="Clear Formatting">
+                        <svg>
+                            <use href="#icon-clean"></use>
+                        </svg>
+                    </button>
+                </span>
+            </div>
+
+            <!-- Quill Editor -->
+            <div id="editor-container"></div>
+        </div> <!-- End Editor Wrapper -->
+    </main>
+
+
+    <!-- Status Bar -->
+    <footer id="statusBar" class="status-bar">
+        <span id="wordCount">0 words</span>
+        <span class="status-separator">•</span>
+        <span id="readingTime">1 min read</span>
+    </footer>
+
+    <!-- Posts Popup Modal -->
+    <div class="posts-modal" id="postsModal">
+        <div class="posts-modal-overlay"></div>
+        <div class="posts-modal-content">
+            <div class="posts-modal-header">
+                <h2 class="posts-modal-title">My Posts</h2>
+                <button id="closePostsModal" class="btn btn-icon btn-sm" title="Close">
+                    <svg>
+                        <use href="#icon-close"></use>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="posts-modal-filters">
+                <div class="filter-row">
+                    <input type="text" id="filterName" class="filter-input" placeholder="Filter by name...">
+
+                    <input type="text" id="filterContent" class="filter-input" placeholder="Filter by content...">
+                </div>
+                <div class="filter-row">
+                    <input type="date" id="filterDateFrom" class="filter-input" title="From date">
+                    <span class="filter-separator">to</span>
+                    <input type="date" id="filterDateTo" class="filter-input" title="To date">
+                    <select id="sortBy" class="filter-select">
+                        <option value="date-desc">Newest</option>
+                        <option value="date-asc">Oldest</option>
+                        <option value="name-asc">A-Z</option>
+                        <option value="name-desc">Z-A</option>
+                    </select>
+                </div>
+                <button id="clearFilters" class="btn btn-text btn-sm">Clear Filters</button>
+            </div>
+
+            <!-- Posts List -->
+            <div class="posts-list" id="postsList">
+                <div class="posts-empty" id="postsEmpty">
+                    <svg>
+                        <use href="#icon-empty-posts"></use>
+                    </svg>
+                    <p>No posts yet</p>
+                    <span>Start writing your first blog post!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h3 class="modal-title">Delete Post?</h3>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this post? This action cannot be undone.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                <button class="btn btn-danger" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shortcuts Modal -->
+    <div class="modal" id="shortcutsModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-lg">
+            <h3 class="modal-title">Keyboard Shortcuts</h3>
+            <div class="modal-body">
+                <div class="shortcuts-grid">
+                    <!-- Editor Actions -->
+                    <div class="shortcut-group">
+                        <h4 class="shortcut-group-title">Editor Actions</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">Save Post</span>
+                            <div class="shortcut-keys"><kbd>Cmd</kbd> + <kbd>S</kbd></div>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">New Post</span>
+                            <div class="shortcut-keys"><kbd>Cmd</kbd> + <kbd>N</kbd></div>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">Open Posts</span>
+                            <div class="shortcut-keys"><kbd>Cmd</kbd> + <kbd>O</kbd></div>
+                        </div>
+                    </div>
+
+                    <!-- Markdown Formatting -->
+                    <div class="shortcut-group">
+                        <h4 class="shortcut-group-title">Markdown Patterns</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">Heading 1-6</span>
+                            <div class="shortcut-keys"><kbd>#</kbd> to <kbd>######</kbd> <kbd>Space</kbd></div>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">Bullet List</span>
+                            <div class="shortcut-keys"><kbd>*</kbd> or <kbd>-</kbd> <kbd>Space</kbd></div>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">Numbered List</span>
+                            <div class="shortcut-keys"><kbd>1.</kbd> <kbd>Space</kbd></div>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">Checklist</span>
+                            <div class="shortcut-keys"><kbd>[]</kbd> <kbd>Space</kbd></div>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">Quote</span>
+                            <div class="shortcut-keys"><kbd>&gt;</kbd> <kbd>Space</kbd></div>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-desc">Code Block</span>
+                            <div class="shortcut-keys"><kbd>```</kbd> <kbd>Space</kbd></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="closeShortcuts">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h3 class="modal-title">App Settings</h3>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h4 class="settings-title">Screen Lock</h4>
+                    <div class="form-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="settingLockEnabled">
+                            <span class="toggle-label">Enable Screen Lock</span>
+                        </label>
+                    </div>
+
+                    <div id="lockSettings" style="display: none; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                        <div class="form-group">
+                            <label>PIN Code</label>
+                            <input type="password" id="settingPin" maxlength="6" placeholder="Enter PIN">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Confirm PIN Code</label>
+                            <input type="password" id="settingPinConfirm" maxlength="6" placeholder="Re-enter PIN">
+                        </div>
+
+                        <div class="form-group">
+                            <label>PIN Length</label>
+                            <div class="radio-group" style="display: flex; gap: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="pinLength" value="4"> 4 Digits
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="pinLength" value="6"> 6 Digits
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Auto-Lock Timer (Minutes)</label>
+                            <input type="number" id="settingTimeout" min="1" max="60" value="5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="closeSettings">Cancel</button>
+                <button class="btn btn-primary" id="saveSettings">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Exit Zen Mode Button -->
+    <button id="exitZenBtn" class="exit-zen-btn" title="Exit Zen Mode (Esc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <use href="#icon-zen-off"></use>
+        </svg>
+        <span>Exit Zen</span>
+    </button>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Quill.js -->
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turndown/7.1.2/turndown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- App Scripts -->
+    <script type="module" src="js/app.js?v=20260121_v4"></script>
+</body>
+
+</html>
