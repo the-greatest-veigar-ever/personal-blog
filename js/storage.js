@@ -6,16 +6,7 @@
  */
 
 import { AppConstants } from './constants.js';
-
-/** Firebase configuration */
-const firebaseConfig = {
-    apiKey: "AIzaSyCbMOhQ3tzDn86ejuvhD4F6syNoZEF4tuw",
-    authDomain: "garold-personal-blog.firebaseapp.com",
-    projectId: "garold-personal-blog",
-    storageBucket: "garold-personal-blog.firebasestorage.app",
-    messagingSenderId: "664212121686",
-    appId: "1:664212121686:web:2b8f69d5aa35e82b8eae0c"
-};
+import { firebaseConfig } from './firebase-config.js';
 
 /** Check if running on Firebase Hosting */
 const hostname = window.location.hostname;
