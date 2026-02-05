@@ -125,12 +125,51 @@ const App = {
                         timeout
                     });
 
+                    // Update Lock Button Visibility
+                    const lockBtn = document.getElementById('lockBtn');
+                    if (lockBtn) {
+                        lockBtn.style.display = enabled ? 'flex' : 'none';
+                    }
+
                     settingsModal.classList.remove('active');
                     Toast.show('Settings saved', 'success');
                 });
 
+                // Reset Lock Settings
+                const resetLockBtn = document.getElementById('resetLockBtn');
+                resetLockBtn?.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to remove the passcode and disable screen lock?')) {
+                        // Reset to defaults
+                        document.getElementById('settingPin').value = '';
+                        document.getElementById('settingPinConfirm').value = '';
+                        lockEnabledCheckbox.checked = false;
+
+                        // Update Controller with defaults
+                        LockController.updateSettings({
+                            enabled: false,
+                            pin: '0000',
+                            length: 4
+                        });
+
+                        // Hide settings inputs
+                        lockSettingsDiv.style.display = 'none';
+
+                        // Hide Lock Button
+                        const lockBtn = document.getElementById('lockBtn');
+                        if (lockBtn) lockBtn.style.display = 'none';
+
+                        Toast.show('Passcode removed and Screen Lock disabled', 'success');
+                    }
+                });
+
                 // Load initial data
                 await PostController.loadPosts();
+
+                // Initialize Lock Button Visibility based on loaded config
+                const lockBtn = document.getElementById('lockBtn');
+                if (lockBtn) {
+                    lockBtn.style.display = LockController.config.enabled ? 'flex' : 'none';
+                }
 
                 // Show welcome screen (user can create new or open existing)
                 UIController.showWelcomeScreen();
